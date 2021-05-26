@@ -4856,11 +4856,25 @@ PSU
         for (psu in tmp) {
             console.log(psu.level)
             if (lvl[tmp[psu].level] == undefined) {
-                lvl[tmp[psu].level] = tmp[psu].wattage
-            } else {
-                if (lvl[tmp[psu].level] < tmp[psu].wattage) {
-                    lvl[tmp[psu].level] = tmp[psu].wattage;
+                lvl[tmp[psu].level] = {
+                    watts: tmp[psu].wattage,
+                    name: tmp[psu].fullName
                 }
+            } else {
+                if (lvl[tmp[psu].level].watts < tmp[psu].wattage) {
+                    lvl[tmp[psu].level] = {
+                        watts: tmp[psu].wattage,
+                        name: tmp[psu].fullName
+                    };
+                }
+            }
+        }
+        for (var i = 0; i <= 34; i++) {
+            if (lvl[i] == undefined && lvl[i - 1] != undefined) {
+                lvl[i] = lvl[i - 1]
+            }
+            if (lvl[i - 1] != undefined && lvl[i - 1].watts > lvl[i].watts) {
+                lvl[i] = lvl[i - 1]
             }
         }
         return lvl
